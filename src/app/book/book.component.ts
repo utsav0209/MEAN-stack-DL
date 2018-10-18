@@ -22,12 +22,15 @@ export class BookComponent implements OnInit {
     };
     this.http.get('/api/book', httpOptions).subscribe(data => {
       this.books = data;
-      console.log(this.books);
     }, err => {
       if(err.status === 401) {
         this.router.navigate(['login']);
       }
     });
+  }
+
+  upload() {
+    this.router.navigate(['uploads']);
   }
 
   logout() {

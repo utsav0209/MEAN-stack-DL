@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    console.log("login request");
     this.http.post('/api/signin',this.loginData).subscribe(resp => {
       this.data = resp;
       localStorage.setItem('jwtToken', this.data.token);

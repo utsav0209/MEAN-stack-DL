@@ -7,6 +7,8 @@ var jwt = require('jsonwebtoken');
 var router = express.Router();
 var User = require("../models/user");
 var Book = require("../models/book");
+var ExtractJwt = require('passport-jwt').ExtractJwt;
+
 
 router.post('/signup', function(req, res) {
   if (!req.body.username || !req.body.password) {
@@ -38,6 +40,7 @@ router.post('/signin', function(req, res) {
       // check if password matches
       user.comparePassword(req.body.password, function (err, isMatch) {
         if (isMatch && !err) {
+
           // if user is found and password is right create a token
           var token = jwt.sign(user.toJSON(), config.secret);
           // return the information including token as JSON
@@ -52,31 +55,37 @@ router.post('/signin', function(req, res) {
 
 router.post('/book', passport.authenticate('jwt', { session: false}), function(req, res) {
   var token = getToken(req.headers);
-  if (token) {
-    console.log(req.body);
+  if(token){
+    uploader = getName(token);
+
     var newBook = new Book({
       isbn: req.body.isbn,
       title: req.body.title,
       author: req.body.author,
-      publisher: req.body.publisher
+      publisher: req.body.publisher,
+      uploader : this.uploader
     });
-
+    console.log("New Book : "+newBook);
     newBook.save(function(err) {
       if (err) {
+        console.log("error at saving book"+err);
         return res.json({success: false, msg: 'Save book failed.'});
       }
-      res.json({success: true, msg: 'Successful created new book.'});
-    });
-  } else {
+      console.log("Book saved");
+      res.json({success: true, msg: 'Successfully created new book.'});
+    })
+  }else{
     return res.status(403).send({success: false, msg: 'Unauthorized.'});
   }
 });
 
+
 router.get('/book', passport.authenticate('jwt', { session: false}), function(req, res) {
+
   var token = getToken(req.headers);
   if (token) {
     Book.find(function (err, books) {
-      if (err) return next(err);
+      if (err){console.log(err+"at get book"); return next(err);}
       res.json(books);
     });
   } else {
@@ -84,6 +93,27 @@ router.get('/book', passport.authenticate('jwt', { session: false}), function(re
   }
 });
 
+router.get('/upload', passport.authenticate('jwt', { session: false}), function(req, res) {
+  var token = getToken(req.headers);
+  if (token) {
+    res.json(null);
+  } else {
+    return res.status(403).send({success: false, msg: 'Unauthorized.'});
+  }
+});
+
+getName = function (token) {
+
+  var  decoded;
+  try {
+      decoded = jwt.verify(token,config.secret);
+      decoded = JSON.stringify(decoded.username)
+      return(decoded);
+  } catch (e) {
+      console.log("Error in finding user");
+      return res.status(401).send('unauthorized');
+  }
+};
 getToken = function (headers) {
   if (headers && headers.authorization) {
     var parted = headers.authorization.split(' ');

@@ -14,7 +14,7 @@ var app = express();
 mongoose.Promise = require('bluebird');
 mongoose.connect(config.database, { promiseLibrary: require('bluebird') })
   .then(() =>  console.log('connection succesful'))
-  .catch((err) => console.error(err));
+  .catch((err) => console.error('Connection error : '+err));
 
 app.use(passport.initialize());
 
@@ -40,7 +40,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.end(err);
+  res.end("Error at api.js : "+err);
 });
 
 module.exports = app;

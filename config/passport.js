@@ -12,12 +12,15 @@ module.exports = function(passport) {
   passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
     User.findOne({id: jwt_payload.id}, function(err, user) {
           if (err) {
+            console.log("User is not verified bcz error in payload");
               return done(err, false);
           }
           if (user) {
-              done(null, user);
+              console.log("User is verified at passport");
+              return done(null,user);
           } else {
-              done(null, false);
+            console.log("User is not found at passport");
+              return done(null, false);
           }
       });
   }));
