@@ -1,6 +1,5 @@
 <div class="container">
-  <h1>Book List <button class="btn btn-success" style="align-self: right ;" (click)="upload()">Add Books</button>
-                <button class="btn btn-success" style="align-self: right ;" (click)="myUploads()">My Uploads</button>
+  <h1>Your Uploads<button class="btn btn-success" style="align-self: right ;" (click)="upload()">Add Books</button>
                 <button class="btn btn-success" style="align-self: right ;" (click)="logout()">Logout</button>
   </h1>
   <table class="table">
@@ -10,8 +9,8 @@
         <th>Title</th>
         <th>Author</th>
         <th>Publisher</th>
-        <th>Uploader</th>
         <th>Download</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -20,8 +19,8 @@
         <td>{{ book.title }}</td>
         <td>{{ book.author }}</td>
         <td>{{ book.publisher }}</td>
-        <td>{{ book.uploader }}</td>
         <td><a [href]="getDownloadLink(book._id)" target="_blank" >download</a></td>
+        <td><button class="btn btn-success" (click)="update(book._id)">Update/Delete</button></td>
       </tr>
     </tbody>
   </table>

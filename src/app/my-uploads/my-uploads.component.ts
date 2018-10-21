@@ -6,22 +6,21 @@ import { tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 
 @Component({
-  selector: 'app-book', 
-  templateUrl: './book.component.html',
-  styleUrls: ['./book.component.css']
+  selector: 'app-my-uploads',
+  templateUrl: './my-uploads.component.html',
+  styleUrls: ['./my-uploads.component.css']
 })
-export class BookComponent implements OnInit {
-
-  isAdmin:boolean;
-  books: any;
-
+export class MyUploadsComponent implements OnInit {
+  
+  books:any;
+  
   constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit() {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
-    this.http.get('/api/book', httpOptions).subscribe(data => {
+    this.http.get('/api/booksofuser', httpOptions).subscribe(data => {
       this.books = data;
     }, err => {
       if(err.status === 401) {
@@ -39,13 +38,12 @@ export class BookComponent implements OnInit {
     this.router.navigate(['uploads']);
   }
 
-  myUploads(){
-    this.router.navigate(['myUploads']);
+  update(bookid){
+    this.router.navigate(['update',bookid]);
   }
 
   logout() {
     localStorage.removeItem('jwtToken');
     this.router.navigate(['login']);
   }
-
 }

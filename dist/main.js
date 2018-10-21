@@ -101,12 +101,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _login_login_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./login/login.component */ "./src/app/login/login.component.ts");
 /* harmony import */ var _signup_signup_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./signup/signup.component */ "./src/app/signup/signup.component.ts");
 /* harmony import */ var _upload_upload_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./upload/upload.component */ "./src/app/upload/upload.component.ts");
+/* harmony import */ var _my_uploads_my_uploads_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./my-uploads/my-uploads.component */ "./src/app/my-uploads/my-uploads.component.ts");
+/* harmony import */ var _update_update_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./update/update.component */ "./src/app/update/update.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -138,6 +142,16 @@ var appRoutes = [
         component: _upload_upload_component__WEBPACK_IMPORTED_MODULE_9__["UploadComponent"],
         data: { title: 'Add Books' }
     },
+    {
+        path: 'myUploads',
+        component: _my_uploads_my_uploads_component__WEBPACK_IMPORTED_MODULE_10__["MyUploadsComponent"],
+        data: { title: 'Uploads' }
+    },
+    {
+        path: 'update/:id',
+        component: _update_update_component__WEBPACK_IMPORTED_MODULE_11__["UpdateComponent"],
+        data: { title: 'Update' }
+    },
     { path: '',
         redirectTo: '/login',
         pathMatch: 'full'
@@ -157,7 +171,9 @@ var AppModule = (function () {
                 _book_book_component__WEBPACK_IMPORTED_MODULE_6__["BookComponent"],
                 _login_login_component__WEBPACK_IMPORTED_MODULE_7__["LoginComponent"],
                 _signup_signup_component__WEBPACK_IMPORTED_MODULE_8__["SignupComponent"],
-                _upload_upload_component__WEBPACK_IMPORTED_MODULE_9__["UploadComponent"]
+                _upload_upload_component__WEBPACK_IMPORTED_MODULE_9__["UploadComponent"],
+                _my_uploads_my_uploads_component__WEBPACK_IMPORTED_MODULE_10__["MyUploadsComponent"],
+                _update_update_component__WEBPACK_IMPORTED_MODULE_11__["UpdateComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -195,7 +211,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <h1>Book List <button class=\"btn btn-success\" style=\"align-self: right ;\" (click)=\"upload()\">Add Books</button>\n                <button class=\"btn btn-success\" style=\"align-self: right ;\" (click)=\"logout()\">Logout</button>\n  </h1>\n  <table class=\"table\">\n    <thead>\n      <tr>\n        <th>ISBN</th>\n        <th>Title</th>\n        <th>Author</th>\n        <th>Publisher</th>\n        <th>Uploader</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr *ngFor=\"let book of books\">\n        <td>{{ book.isbn }}</td>\n        <td>{{ book.title }}</td>\n        <td>{{ book.author }}</td>\n        <td>{{ book.publisher }}</td>\n        <td>{{ book.uploader }}</td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n"
+module.exports = "<div class=\"container\">\n  <h1>Book List <button class=\"btn btn-success\" style=\"align-self: right ;\" (click)=\"upload()\">Add Books</button>\n                <button class=\"btn btn-success\" style=\"align-self: right ;\" (click)=\"myUploads()\">My Uploads</button>\n                <button class=\"btn btn-success\" style=\"align-self: right ;\" (click)=\"logout()\">Logout</button>\n  </h1>\n  <table class=\"table\">\n    <thead>\n      <tr>\n        <th>ISBN</th>\n        <th>Title</th>\n        <th>Author</th>\n        <th>Publisher</th>\n        <th>Uploader</th>\n        <th>Download</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr *ngFor=\"let book of books\">\n        <td>{{ book.isbn }}</td>\n        <td>{{ book.title }}</td>\n        <td>{{ book.author }}</td>\n        <td>{{ book.publisher }}</td>\n        <td>{{ book.uploader }}</td>\n        <td><a [href]=\"getDownloadLink(book._id)\" target=\"_blank\" >download</a></td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n"
 
 /***/ }),
 
@@ -228,6 +244,10 @@ var BookComponent = (function () {
     function BookComponent(http, router) {
         this.http = http;
         this.router = router;
+        this.getDownloadLink = function (id) {
+            var dstring = "http://www.downloadLink.com/" + id;
+            return dstring;
+        };
     }
     BookComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -244,6 +264,9 @@ var BookComponent = (function () {
     };
     BookComponent.prototype.upload = function () {
         this.router.navigate(['uploads']);
+    };
+    BookComponent.prototype.myUploads = function () {
+        this.router.navigate(['myUploads']);
     };
     BookComponent.prototype.logout = function () {
         localStorage.removeItem('jwtToken');
@@ -356,6 +379,100 @@ var LoginComponent = (function () {
 
 /***/ }),
 
+/***/ "./src/app/my-uploads/my-uploads.component.css":
+/*!*****************************************************!*\
+  !*** ./src/app/my-uploads/my-uploads.component.css ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/my-uploads/my-uploads.component.html":
+/*!******************************************************!*\
+  !*** ./src/app/my-uploads/my-uploads.component.html ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\n  <h1>Your Uploads<button class=\"btn btn-success\" style=\"align-self: right ;\" (click)=\"upload()\">Add Books</button>\n                <button class=\"btn btn-success\" style=\"align-self: right ;\" (click)=\"logout()\">Logout</button>\n  </h1>\n  <table class=\"table\">\n    <thead>\n      <tr>\n        <th>ISBN</th>\n        <th>Title</th>\n        <th>Author</th>\n        <th>Publisher</th>\n        <th>Download</th>\n        <th>Action</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr *ngFor=\"let book of books\">\n        <td>{{ book.isbn }}</td>\n        <td>{{ book.title }}</td>\n        <td>{{ book.author }}</td>\n        <td>{{ book.publisher }}</td>\n        <td><a [href]=\"getDownloadLink(book._id)\" target=\"_blank\" >download</a></td>\n        <td><button class=\"btn btn-success\" (click)=\"update(book._id)\">Update/Delete</button></td>\n      </tr>\n    </tbody>\n  </table>\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/my-uploads/my-uploads.component.ts":
+/*!****************************************************!*\
+  !*** ./src/app/my-uploads/my-uploads.component.ts ***!
+  \****************************************************/
+/*! exports provided: MyUploadsComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MyUploadsComponent", function() { return MyUploadsComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/esm5/http.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/esm5/router.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var MyUploadsComponent = (function () {
+    function MyUploadsComponent(http, router) {
+        this.http = http;
+        this.router = router;
+        this.getDownloadLink = function (id) {
+            var dstring = "http://www.downloadLink.com/" + id;
+            return dstring;
+        };
+    }
+    MyUploadsComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        var httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({ 'Authorization': localStorage.getItem('jwtToken') })
+        };
+        this.http.get('/api/booksofuser', httpOptions).subscribe(function (data) {
+            _this.books = data;
+        }, function (err) {
+            if (err.status === 401) {
+                _this.router.navigate(['login']);
+            }
+        });
+    };
+    MyUploadsComponent.prototype.upload = function () {
+        this.router.navigate(['uploads']);
+    };
+    MyUploadsComponent.prototype.update = function (bookid) {
+        this.router.navigate(['update', bookid]);
+    };
+    MyUploadsComponent.prototype.logout = function () {
+        localStorage.removeItem('jwtToken');
+        this.router.navigate(['login']);
+    };
+    MyUploadsComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-my-uploads',
+            template: __webpack_require__(/*! ./my-uploads.component.html */ "./src/app/my-uploads/my-uploads.component.html"),
+            styles: [__webpack_require__(/*! ./my-uploads.component.css */ "./src/app/my-uploads/my-uploads.component.css")]
+        }),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+    ], MyUploadsComponent);
+    return MyUploadsComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/signup/signup.component.css":
 /*!*********************************************!*\
   !*** ./src/app/signup/signup.component.css ***!
@@ -446,6 +563,123 @@ var SignupComponent = (function () {
 
 /***/ }),
 
+/***/ "./src/app/update/update.component.css":
+/*!*********************************************!*\
+  !*** ./src/app/update/update.component.css ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/update/update.component.html":
+/*!**********************************************!*\
+  !*** ./src/app/update/update.component.html ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\n  <h1>Book List <button class=\"btn btn-success\" style=\"align-self: right ;\" (click)=\"upload()\">Add Books</button>\n    <button class=\"btn btn-success\" style=\"align-self: right ;\" (click)=\"myUploads()\">My Uploads</button>\n    <button class=\"btn btn-success\" style=\"align-self: right ;\" (click)=\"logout()\">Logout</button>\n  </h1>\n\t<form class=\"form\" (ngSubmit)=\"update()\" #uploadForm=\"ngForm\">\n\t\t<div class=\"alert alert-warning alert-dismissible\" role=\"alert\" *ngIf=\"message !== ''\">\n\t\t  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n\t\t  {{message}}\n\t\t</div>\n\t\t<h2 class=\"form\">Change Book data Here:</h2>\n\t\t<label for=\"inputTitle\" class=\"sr-only\">Book Title</label>\n\t\t<input type=\"text\" class=\"form-control\" placeholder=\"Book Title\" [(ngModel)]=\"bookData.title\" name=\"title\" required/>\n\t\t<label for=\"inputIsbn\" class=\"sr-only\">Book Title</label>\n\t\t<input type=\"text\" class=\"form-control\" placeholder=\"ISBN no.\" [(ngModel)]=\"bookData.isbn\" name=\"isbn\" required/>\n\t\t<label for=\"inputAuthor\" class=\"sr-only\">Book Title</label>\n\t\t<input type=\"text\" class=\"form-control\" placeholder=\"Author Name\" [(ngModel)]=\"bookData.author\" name=\"author\" required/>\n\t\t<label for=\"inputPublisher\" class=\"sr-only\">Book Title</label>\n\t\t<input type=\"text\" class=\"form-control\" placeholder=\"Publisher Name\" [(ngModel)]=\"bookData.publisher\" name=\"publisher\" required/>\n\t\t<button class=\"btn btn-lg btn-primary btn-block\" type=\"submit\">Upload</button>\n    <button class=\"btn btn-danger\" style=\"align-self: right ;\" (click)=\"delete()\">Delete</button>\n  </form>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/update/update.component.ts":
+/*!********************************************!*\
+  !*** ./src/app/update/update.component.ts ***!
+  \********************************************/
+/*! exports provided: UpdateComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UpdateComponent", function() { return UpdateComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/esm5/http.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/esm5/router.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var UpdateComponent = (function () {
+    function UpdateComponent(http, router, route) {
+        this.http = http;
+        this.router = router;
+        this.route = route;
+        this.book = { id: '' };
+    }
+    UpdateComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.book.id = (this.route.snapshot.paramMap.get('id'));
+        var httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({ 'Authorization': localStorage.getItem('jwtToken') })
+        };
+        this.http.post('/api/findonebook', this.book, httpOptions).subscribe(function (data) {
+            _this.bookData = data;
+        }, function (err) {
+            if (err.status === 401) {
+                _this.router.navigate(['login']);
+            }
+        });
+    };
+    UpdateComponent.prototype.update = function () {
+        var _this = this;
+        var httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({ 'Authorization': localStorage.getItem('jwtToken') })
+        };
+        this.http.post('/api/updatebook', this.bookData, httpOptions).subscribe(function (resp) {
+            _this.router.navigate(['books']);
+        }, function (err) {
+            console.log("<---" + err + "--->");
+            _this.message = err.error.msg;
+        });
+    };
+    UpdateComponent.prototype.delete = function () {
+        var _this = this;
+        var httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({ 'Authorization': localStorage.getItem('jwtToken') })
+        };
+        this.http.post('/api/deletebook', this.book, httpOptions).subscribe(function (resp) {
+            _this.router.navigate(['books']);
+        }, function (err) {
+            console.log("<---" + err + "--->");
+            _this.message = err.error.msg;
+        });
+    };
+    UpdateComponent.prototype.upload = function () {
+        this.router.navigate(['uploads']);
+    };
+    UpdateComponent.prototype.myUploads = function () {
+        this.router.navigate(['myUploads']);
+    };
+    UpdateComponent.prototype.logout = function () {
+        localStorage.removeItem('jwtToken');
+        this.router.navigate(['login']);
+    };
+    UpdateComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-update',
+            template: __webpack_require__(/*! ./update.component.html */ "./src/app/update/update.component.html"),
+            styles: [__webpack_require__(/*! ./update.component.css */ "./src/app/update/update.component.css")]
+        }),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"]])
+    ], UpdateComponent);
+    return UpdateComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/upload/upload.component.css":
 /*!*********************************************!*\
   !*** ./src/app/upload/upload.component.css ***!
@@ -464,7 +698,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n\t<form class=\"form-signin\" (ngSubmit)=\"upload()\" #uploadForm=\"ngForm\">\n\t\t<div class=\"alert alert-warning alert-dismissible\" role=\"alert\" *ngIf=\"message !== ''\">\n\t\t  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n\t\t  {{message}}\n\t\t</div>\n\t\t<h2 class=\"form-signin-heading\">Add Book Here:</h2>\n\t\t<label for=\"inputTitle\" class=\"sr-only\">Book Title</label>\n\t\t<input type=\"text\" class=\"form-control\" placeholder=\"Book Title\" [(ngModel)]=\"bookData.title\" name=\"title\" required/>\n\t\t<label for=\"inputIsbn\" class=\"sr-only\">Book Title</label>\n\t\t<input type=\"text\" class=\"form-control\" placeholder=\"ISBN no.\" [(ngModel)]=\"bookData.isbn\" name=\"isbn\" required/>\n\t\t<label for=\"inputAuthor\" class=\"sr-only\">Book Title</label>\n\t\t<input type=\"text\" class=\"form-control\" placeholder=\"Author Name\" [(ngModel)]=\"bookData.author\" name=\"author\" required/>\n\t\t<label for=\"inputPublisher\" class=\"sr-only\">Book Title</label>\n\t\t<input type=\"text\" class=\"form-control\" placeholder=\"Publisher Name\" [(ngModel)]=\"bookData.publisher\" name=\"publisher\" required/>\n\t\t<button class=\"btn btn-lg btn-primary btn-block\" type=\"submit\"  >upload</button>\n\t</form>\n</div>"
+module.exports = "<div class=\"container\">\n\t<form class=\"form\" (ngSubmit)=\"upload()\" #uploadForm=\"ngForm\">\n\t\t<div class=\"alert alert-warning alert-dismissible\" role=\"alert\" *ngIf=\"message !== ''\">\n\t\t  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n\t\t  {{message}}\n\t\t</div>\n\t\t<h2 class=\"form\">Add Book Here:</h2>\n\t\t<label for=\"inputTitle\" class=\"sr-only\">Book Title</label>\n\t\t<input type=\"text\" class=\"form-control\" placeholder=\"Book Title\" [(ngModel)]=\"bookData.title\" name=\"title\" required/>\n\t\t<label for=\"inputIsbn\" class=\"sr-only\">Book Title</label>\n\t\t<input type=\"text\" class=\"form-control\" placeholder=\"ISBN no.\" [(ngModel)]=\"bookData.isbn\" name=\"isbn\" required/>\n\t\t<label for=\"inputAuthor\" class=\"sr-only\">Book Title</label>\n\t\t<input type=\"text\" class=\"form-control\" placeholder=\"Author Name\" [(ngModel)]=\"bookData.author\" name=\"author\" required/>\n\t\t<label for=\"inputPublisher\" class=\"sr-only\">Book Title</label>\n\t\t<input type=\"text\" class=\"form-control\" placeholder=\"Publisher Name\" [(ngModel)]=\"bookData.publisher\" name=\"publisher\" required/>\n\t\t<button class=\"btn btn-lg btn-primary btn-block\" type=\"submit\"  >upload</button>\n\t</form>\n</div>"
 
 /***/ }),
 
@@ -518,7 +752,6 @@ var UploadComponent = (function () {
         var httpOptions = {
             headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({ 'Authorization': localStorage.getItem('jwtToken') })
         };
-        //const body = JSON.stringify(this.bookData);
         this.http.post('/api/book', this.bookData, httpOptions).subscribe(function (resp) {
             _this.router.navigate(['books']);
         }, function (err) {

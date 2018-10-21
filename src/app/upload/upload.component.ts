@@ -37,7 +37,6 @@ export class UploadComponent implements OnInit {
     let httpOptions = {
       headers: new HttpHeaders({ 'Authorization': localStorage.getItem('jwtToken') })
     };
-    //const body = JSON.stringify(this.bookData);
 
     this.http.post('/api/book',this.bookData,httpOptions).subscribe(resp => {
       this.router.navigate(['books']);

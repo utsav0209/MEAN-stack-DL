@@ -16,7 +16,8 @@ router.post('/signup', function(req, res) {
   } else {
     var newUser = new User({
       username: req.body.username,
-      password: req.body.password
+      password: req.body.password,
+  
     });
     // save the user
     newUser.save(function(err) {
@@ -93,6 +94,69 @@ router.get('/book', passport.authenticate('jwt', { session: false}), function(re
   }
 });
 
+router.get('/booksofuser', passport.authenticate('jwt', { session: false}), function(req, res) {
+
+  var token = getToken(req.headers);
+  if (token) {
+    Book.find({uploader :  getName(token) },function (err, books) {
+      if (err){console.log(err+"at get booksofuser"); return next(err);}
+      res.json(books);
+    });
+  } else {
+    return res.status(403).send({success: false, msg: 'Unauthorized.'});
+  }
+});
+
+router.post('/findonebook', passport.authenticate('jwt', { session: false}), function(req, res) {
+
+  var token = getToken(req.headers);
+  if (token) {
+    Book.findById(req.body.id,function (err, books) {
+      if (err){console.log(err+"at get booksofuser"); return next(err);}
+      res.json(books);
+    });
+  } else {
+    return res.status(403).send({success: false, msg: 'Unauthorized.'});
+  }
+});
+
+router.post('/updatebook', passport.authenticate('jwt', { session: false}), function(req, res) {
+  var token = getToken(req.headers);
+  if(token){
+    Book.findByIdAndUpdate(req.body._id,{
+      isbn: req.body.isbn,
+      title: req.body.title,
+      author: req.body.author,
+      publisher: req.body.publisher,
+    },function(err,books){
+        if (err) {
+        console.log("error at updating book"+err);
+        return res.json({success: false, msg: 'Update book failed.'});
+      }
+      console.log("Book updated");
+      res.json({success: true, msg: 'Successfully updated book.'});
+    })
+  }else{
+    return res.status(403).send({success: false, msg: 'Unauthorized.'});
+  }
+});
+
+router.post('/deletebook', passport.authenticate('jwt', { session: false}), function(req, res) {
+  var token = getToken(req.headers);
+  if(token){
+    Book.findByIdAndRemove(req.body.id,function(err,books){
+        if (err) {
+        console.log("error at deleting book"+err);
+        return res.json({success: false, msg: 'Save book failed.'});
+      }
+      console.log("Book deleted");
+      res.json({success: true, msg: 'Successfully deleted book.'});
+    })
+  }else{
+    return res.status(403).send({success: false, msg: 'Unauthorized.'});
+  }
+});
+
 router.get('/upload', passport.authenticate('jwt', { session: false}), function(req, res) {
   var token = getToken(req.headers);
   if (token) {
@@ -107,8 +171,10 @@ getName = function (token) {
   var  decoded;
   try {
       decoded = jwt.verify(token,config.secret);
-      decoded = JSON.stringify(decoded.username)
-      return(decoded);
+      decoded = JSON.stringify(decoded.username);
+      var parted = decoded.split('"');
+      console.log(parted[1]);
+      return(parted[1]);
   } catch (e) {
       console.log("Error in finding user");
       return res.status(401).send('unauthorized');

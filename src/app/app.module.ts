@@ -9,6 +9,8 @@ import { BookComponent } from './book/book.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { UploadComponent } from './upload/upload.component';
+import { MyUploadsComponent } from './my-uploads/my-uploads.component';
+import { UpdateComponent } from './update/update.component';
 
 const appRoutes: Routes = [
   {
@@ -31,6 +33,16 @@ const appRoutes: Routes = [
     component: UploadComponent,
     data: { title: 'Add Books' }
   },
+  {
+    path: 'myUploads',
+    component: MyUploadsComponent,
+    data: { title: 'Uploads' }
+  },
+  {
+    path: 'update/:id',
+    component: UpdateComponent,
+    data: { title: 'Update' }
+  },
   { path: '',
     redirectTo: '/login',
     pathMatch: 'full'
@@ -47,7 +59,9 @@ const appRoutes: Routes = [
     BookComponent,
     LoginComponent,
     SignupComponent,
-    UploadComponent
+    UploadComponent,
+    MyUploadsComponent,
+    UpdateComponent
   ],
   imports: [
     BrowserModule,
